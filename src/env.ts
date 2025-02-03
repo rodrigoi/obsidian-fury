@@ -3,6 +3,8 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
+    DB_URL: z.string().min(1),
+
     RESEND_API_KEY: z.string().min(1),
 
     EMAIL_FROM_NAME: z.string().min(1),

@@ -2,8 +2,15 @@
   "name": "obsidian-fury",
   "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@libsql/client": "^0.14.0",
     "@types/bun": "latest",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
