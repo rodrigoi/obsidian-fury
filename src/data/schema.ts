@@ -5,7 +5,7 @@ import { sql } from "drizzle-orm";
 
 export const trulyRemote = sqliteTable("trulyRemote", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  listingId: integer("listingId").notNull(),
+  listingId: integer("listingId").notNull().unique(),
   companyName: text("companyName").notNull(),
   title: text("title").notNull(),
   description: text("description"),

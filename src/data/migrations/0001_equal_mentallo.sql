@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `trulyRemote_listingId_unique` ON `trulyRemote` (`listingId`);
