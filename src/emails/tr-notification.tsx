@@ -15,6 +15,12 @@ import {
   Text,
 } from "@react-email/components";
 
+import { toCamelCase } from "@/core/toCamelCase";
+import {
+  TRULY_REMOTE_CATEGORIES,
+  type CamelCase,
+  type TrulyRemoteCategory,
+} from "@/types";
 import { format } from "date-fns";
 
 type TRListing = {
@@ -116,6 +122,15 @@ const productListings: Array<TRListing> = [
   },
 ];
 
+const testListings: Partial<TRNotificationProps> = {
+  development: developmentListings,
+  marketing: marketingListings,
+  product: productListings,
+  business: [],
+  sales: [],
+  customerService: [],
+};
+
 const TRCategoryListings = ({
   section,
   listings,
@@ -142,14 +157,9 @@ const TRCategoryListings = ({
   </Section>
 );
 
-export const TRNotification: React.FC<Readonly<TRNotificationProps>> = ({
-  development = [],
-  marketing = [],
-  product = [],
-  business = [],
-  sales = [],
-  customerService = [],
-}) => (
+export const TRNotification: React.FC<Readonly<TRNotificationProps>> = (
+  listingsByCategory = testListings
+) => (
   <Html>
     <Preview>Found new job offers on TrulyRemote.co to check.</Preview>
     <Head />
@@ -157,48 +167,20 @@ export const TRNotification: React.FC<Readonly<TRNotificationProps>> = ({
       <Body className="bg-gray-200 font-sans p-3">
         <Container className="bg-white border border-solid border-gray-300 p-3 rounded-lg">
           <Heading as="h3">New TrulyRemote.co Jobs!</Heading>
-          {development.length > 0 && (
+          {TRULY_REMOTE_CATEGORIES.map((category, index) => (
             <>
-              <Hr />
+              {index > 0 && <Hr />}
               <TRCategoryListings
-                section="Development"
-                listings={development}
+                key={category}
+                section={category}
+                listings={
+                  listingsByCategory[
+                    toCamelCase(category) as CamelCase<TrulyRemoteCategory>
+                  ] ?? []
+                }
               />
             </>
-          )}
-          {marketing.length > 0 && (
-            <>
-              <Hr />
-              <TRCategoryListings section="Marketing" listings={marketing} />
-            </>
-          )}
-          {product.length > 0 && (
-            <>
-              <Hr />
-              <TRCategoryListings section="Product" listings={product} />
-            </>
-          )}
-          {business.length > 0 && (
-            <>
-              <Hr />
-              <TRCategoryListings section="Business" listings={business} />
-            </>
-          )}
-          {sales.length > 0 && (
-            <>
-              <Hr />
-              <TRCategoryListings section="Sales" listings={sales} />
-            </>
-          )}
-          {customerService.length > 0 && (
-            <>
-              <Hr />
-              <TRCategoryListings
-                section="Cuscustomer Service"
-                listings={customerService}
-              />
-            </>
-          )}
+          ))}
         </Container>
       </Body>
     </Tailwind>

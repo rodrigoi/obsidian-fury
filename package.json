@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
-    "db:push": "drizzle-kit push",
-    "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio"
+    "dev:email": "email dev --dir ./src/emails --port 3003",
+    "db:push": "bun run --env-file=.env.local drizzle-kit push",
+    "db:generate": "bun run --env-file=.env.local drizzle-kit generate",
+    "db:studio": "bun run --env-file=.env.local drizzle-kit studio"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
