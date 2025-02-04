@@ -134,28 +134,40 @@ const testListings: Partial<TRNotificationProps> = {
 const TRCategoryListings = ({
   section,
   listings,
+  index,
+  ...rest
 }: {
   section: string;
   listings: Array<TRListing>;
-}) => (
-  <Section>
-    <Heading as="h4" className="m-0 py-2">
-      {section}
-    </Heading>
-    {listings.map((listing) => (
-      <Row key={listing.listingId} className="pb-2">
-        <Text className="m-0 text-gray-500 text-s">{listing.companyName}</Text>
-        <Text className="m-0">
-          <Link href={listing.url}>{listing.title}</Link>
-        </Text>
-        <Text className="m-0 text-gray-500 text-xs">{listing.regions}</Text>
-        <Text className="m-0 text-gray-500 text-xs">
-          Puiblished: {format(listing.publishedAt, "PPP")}
-        </Text>
-      </Row>
-    ))}
-  </Section>
-);
+  index: number;
+}) => {
+  if (listings.length === 0) {
+    return null;
+  }
+
+  return (
+    <Section {...rest}>
+      {index > 0 && <Hr />}
+      <Heading as="h4" className="m-0 py-2">
+        {section}
+      </Heading>
+      {listings.map((listing) => (
+        <Row key={listing.listingId} className="pb-2">
+          <Text className="m-0 text-gray-500 text-s">
+            {listing.companyName}
+          </Text>
+          <Text className="m-0">
+            <Link href={listing.url}>{listing.title}</Link>
+          </Text>
+          <Text className="m-0 text-gray-500 text-xs">{listing.regions}</Text>
+          <Text className="m-0 text-gray-500 text-xs">
+            Puiblished: {format(listing.publishedAt, "PPP")}
+          </Text>
+        </Row>
+      ))}
+    </Section>
+  );
+};
 
 export const TRNotification: React.FC<Readonly<TRNotificationProps>> = (
   listingsByCategory = testListings
@@ -168,18 +180,16 @@ export const TRNotification: React.FC<Readonly<TRNotificationProps>> = (
         <Container className="bg-white border border-solid border-gray-300 p-3 rounded-lg">
           <Heading as="h3">New TrulyRemote.co Jobs!</Heading>
           {TRULY_REMOTE_CATEGORIES.map((category, index) => (
-            <>
-              {index > 0 && <Hr />}
-              <TRCategoryListings
-                key={category}
-                section={category}
-                listings={
-                  listingsByCategory[
-                    toCamelCase(category) as CamelCase<TrulyRemoteCategory>
-                  ] ?? []
-                }
-              />
-            </>
+            <TRCategoryListings
+              key={category}
+              index={index}
+              section={category}
+              listings={
+                listingsByCategory[
+                  toCamelCase(category) as CamelCase<TrulyRemoteCategory>
+                ] ?? []
+              }
+            />
           ))}
         </Container>
       </Body>
