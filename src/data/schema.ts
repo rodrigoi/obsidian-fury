@@ -22,7 +22,7 @@ export type TrulyRemote = InferInsertModel<typeof trulyRemote>;
 
 export const hackernews = sqliteTable("hackernews", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  postId: integer("postid").notNull(),
+  postId: integer("postid").notNull().unique(),
   title: text("title").notNull(),
   url: text("url").notNull(),
   publishedAt: text("publishedat").notNull(),

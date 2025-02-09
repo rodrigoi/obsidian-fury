@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `hackernews_postid_unique` ON `hackernews` (`postid`);

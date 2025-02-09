@@ -26,6 +26,7 @@ if (newListings.length === 0) {
   process.exit(0);
 }
 
+console.log(`Found ${newListings.length} new listings.`);
 // Insert new listings into the database
 await insertNewListings(newListings);
 
