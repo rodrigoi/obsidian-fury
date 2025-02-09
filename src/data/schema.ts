@@ -3,7 +3,7 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import type { InferInsertModel } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 
-export const trulyRemote = sqliteTable("trulyRemote", {
+export const trulyRemote = sqliteTable("truly-remote", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   listingId: integer("listingId").notNull().unique(),
   companyName: text("companyName").notNull(),
@@ -19,3 +19,14 @@ export const trulyRemote = sqliteTable("trulyRemote", {
 });
 
 export type TrulyRemote = InferInsertModel<typeof trulyRemote>;
+
+export const hackernews = sqliteTable("hackernews", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  postId: integer("postid").notNull(),
+  title: text("title").notNull(),
+  url: text("url").notNull(),
+  publishedAt: text("publishedat").notNull(),
+  createdAt: text("createdat")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+});
