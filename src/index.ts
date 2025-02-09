@@ -3,7 +3,7 @@ import {
   getAllListingIds,
   insertNewListings,
   sendNewListingsEmail,
-} from "./core/trulyRemote";
+} from "@/core/truly-remote";
 
 import { TRULY_REMOTE_CATEGORIES } from "./types";
 

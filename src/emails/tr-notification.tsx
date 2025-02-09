@@ -15,7 +15,7 @@ import {
   Text,
 } from "@react-email/components";
 
-import { toCamelCase } from "@/core/toCamelCase";
+import { toCamelCase } from "@/core/to-camel-case";
 import {
   TRULY_REMOTE_CATEGORIES,
   type CamelCase,
