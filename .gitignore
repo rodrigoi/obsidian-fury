@@ -171,7 +171,8 @@ dist
 # IntelliJ based IDEs
 .idea
 
-.data
+# Data directory
+data
 
 # Finder (MacOS) folder config
 .DS_Store
