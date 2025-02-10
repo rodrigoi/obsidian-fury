@@ -1,34 +1,71 @@
-import {
-  fetchListings,
-  getAllListingIds,
-  insertNewListings,
-  sendNewListingsEmail,
-} from "@/core/truly-remote";
+#!/usr/bin/env bun
 
-import { TRULY_REMOTE_CATEGORIES } from "./types";
+import arg from "arg";
+import { z } from "zod";
 
-// Fetch all listings for each category
-const categoryListings = await Promise.all(
-  TRULY_REMOTE_CATEGORIES.map((category) => fetchListings(category))
+/**
+ * available worker names validation schema
+ */
+const workersSchema = z.enum(["hacker-news", "truly-remote"]);
+type Workers = z.infer<typeof workersSchema>;
+
+/**
+ * available workers mappings
+ */
+const availableWorkers: Record<Workers, string> = {
+  "hacker-news": "hacker-news.ts",
+  "truly-remote": "truly-remote.ts",
+};
+
+/**
+ * process arguments
+ */
+const args = arg(
+  {
+    // Types
+    "--help": Boolean,
+    "--version": Boolean,
+    "--worker": String, // --worker <string> or --worker=<string>
+
+    // Aliases
+    "-w": "--worker", // -w <string>; result is stored in --worker
+  },
+  {
+    argv: Bun.argv,
+  }
 );
 
-// Get all listing IDs from the database
-const listingIds = new Set(await getAllListingIds());
+/**
+ * Application entry point.
+ */
+const main = async () => {
+  if (args["--worker"]) {
+    const parsedWorker = workersSchema.safeParse(args["--worker"]);
 
-// Filter out any listings that already exist in the database
-const newListings = categoryListings
-  .flat()
-  .filter(({ listingId }) => !listingIds.has(listingId));
+    if (!parsedWorker.success) {
+      console.log("invalid worker");
+      process.exit(1);
+    }
 
-// Bail if there are no new listings
-if (newListings.length === 0) {
-  console.log("No new listings found.");
-  process.exit(0);
-}
+    const workerFile = availableWorkers[parsedWorker.data];
 
-console.log(`Found ${newListings.length} new listings.`);
-// Insert new listings into the database
-await insertNewListings(newListings);
+    // import the worker file. This will start the worker process.
+    await import(`@/workers/${workerFile}`);
+  }
+};
 
-// Send email notification of new listings
-await sendNewListingsEmail(newListings);
+/**
+ * Global error handler.
+ */
+main().catch((err) => {
+  console.log("Something went wrong...");
+
+  if (err instanceof Error) {
+    console.error(err);
+  } else {
+    console.error("Unknown error");
+    console.log(err);
+  }
+
+  process.exit(1);
+});

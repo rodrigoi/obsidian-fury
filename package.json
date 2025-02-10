@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "bun run src/index.ts",
     "dev:email": "email dev --dir ./src/emails --port 3003",
+    "build": "bun build src/index.ts src/workers/hacker-news.ts src/workers/truly-remote.ts --outdir dist --splitting --sourcemap=linked --target bun",
     "db:push": "bun run --env-file=.env.local drizzle-kit push",
     "db:generate": "bun run --env-file=.env.local drizzle-kit generate",
     "db:migrate": "bun run --env-file=.env.local drizzle-kit migrate",
@@ -24,6 +25,7 @@
   "dependencies": {
     "@react-email/components": "^0.0.32",
     "@t3-oss/env-core": "^0.12.0",
+    "arg": "^5.0.2",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.39.1",
     "react": "^19.0.0",
