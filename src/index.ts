@@ -1,6 +1,8 @@
 #!/usr/bin/env bun
 
 import arg from "arg";
+import hackerNews from "@/workers/hacker-news";
+import trulyRemote from "@/workers/truly-remote";
 import { z } from "zod";
 
 /**
@@ -12,9 +14,9 @@ type Workers = z.infer<typeof workersSchema>;
 /**
  * available workers mappings
  */
-const availableWorkers: Record<Workers, string> = {
-  "hacker-news": "hacker-news.ts",
-  "truly-remote": "truly-remote.ts",
+const availableWorkers: Record<Workers, () => Promise<void>> = {
+  "hacker-news": hackerNews,
+  "truly-remote": trulyRemote,
 };
 
 /**
@@ -47,10 +49,10 @@ const main = async () => {
       process.exit(1);
     }
 
-    const workerFile = availableWorkers[parsedWorker.data];
+    const worker = availableWorkers[parsedWorker.data];
 
-    // import the worker file. This will start the worker process.
-    await import(`@/workers/${workerFile}`);
+    // start the worker process.
+    await worker();
   }
 };
 
