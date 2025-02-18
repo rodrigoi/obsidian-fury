@@ -1,11 +1,9 @@
 services:
   obsidian-fury:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+    image: obsidian-fury:0.0.2
     container_name: obsidian-fury
     restart: unless-stopped
     volumes:
-      - ../.data:/app/data
+      - ../data:/data
     env_file:
       - ../.env.local
