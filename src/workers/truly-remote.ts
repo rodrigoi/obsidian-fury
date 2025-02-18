@@ -23,11 +23,14 @@ export default async () => {
 
   // Bail if there are no new listings
   if (newListings.length === 0) {
-    console.log("[Truly Remote] No new listings found.");
+    console.log(new Date(), "[Truly Remote] No new listings found.");
     process.exit(0);
   }
 
-  console.log(`[Truly Remote] Found ${newListings.length} new listings.`);
+  console.log(
+    new Date(),
+    `[Truly Remote] Found ${newListings.length} new listings.`
+  );
 
   // Insert new listings into the database
   await insertNewListings(newListings);

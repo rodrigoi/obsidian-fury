@@ -18,14 +18,14 @@ export default async () => {
 
   // Bail if there are no new stories
   if (newStoryIds.length === 0) {
-    console.log("[Hacker News] No new stories found.");
+    console.log(new Date(), "[Hacker News] No new stories found.");
     process.exit(0);
   }
 
   // Fetch all new stories from the Hacker News API
   const stories = await fetchStories(newStoryIds);
 
-  console.log(`[Hacker News] Found ${stories.length} new stories.`);
+  console.log(new Date(), `[Hacker News] Found ${stories.length} new stories.`);
 
   // Insert new stories into the database
   await insertNewStories(stories);
