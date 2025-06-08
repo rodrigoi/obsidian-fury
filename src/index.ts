@@ -1,8 +1,9 @@
 #!/usr/bin/env bun
 
-import arg from "arg";
+import { startMetricsServer } from "@/metrics/server";
 import hackerNews from "@/workers/hacker-news";
 import trulyRemote from "@/workers/truly-remote";
+import arg from "arg";
 import { z } from "zod";
 
 /**
@@ -27,6 +28,7 @@ const args = arg(
     // Types
     "--help": Boolean,
     "--version": Boolean,
+    "--metrics": Boolean,
     "--worker": String, // --worker <string> or --worker=<string>
 
     // Aliases
@@ -41,6 +43,10 @@ const args = arg(
  * Application entry point.
  */
 const main = async () => {
+  if (args["--metrics"]) {
+    await startMetricsServer();
+  }
+
   if (args["--worker"]) {
     const parsedWorker = workersSchema.safeParse(args["--worker"]);
 
