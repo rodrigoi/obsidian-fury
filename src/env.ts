@@ -5,7 +5,7 @@ export const env = createEnv({
   server: {
     DB_URL: z.string().min(1),
 
-    METRICS_PORT: z.number().default(9090),
+    METRICS_PORT: z.coerce.number().default(9090),
 
     RESEND_API_KEY: z.string().min(1),
 
