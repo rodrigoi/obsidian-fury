@@ -1,8 +1,9 @@
 import { register } from "@/metrics/client";
+import { env } from "bun";
 
 export const startMetricsServer = async () => {
   const server = Bun.serve({
-    port: 9091,
+    port: env.METRICS_PORT,
     hostname: "0.0.0.0",
     async fetch(request) {
       if (request.url.endsWith("/metrics")) {
