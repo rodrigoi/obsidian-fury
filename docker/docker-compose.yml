@@ -1,9 +1,38 @@
 services:
-  obsidian-fury:
-    image: obsidian-fury:0.0.2
-    container_name: obsidian-fury
-    restart: unless-stopped
+  # obsidian-fury:
+  #   image: obsidian-fury:0.0.2
+  #   container_name: obsidian-fury
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ../data:/data
+  #   env_file:
+  #     - ../.env.local
+
+  prometheus:
+    image: prom/prometheus:latest
     volumes:
-      - ../data:/data
-    env_file:
-      - ../.env.local
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3030:3000"
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:

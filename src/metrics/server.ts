@@ -2,7 +2,7 @@ import { register } from "@/metrics/client";
 
 export const startMetricsServer = async () => {
   const server = Bun.serve({
-    port: 9090,
+    port: 9091,
     hostname: "0.0.0.0",
     async fetch(request) {
       if (request.url.endsWith("/metrics")) {

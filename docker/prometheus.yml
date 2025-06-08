@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "obsidian-fury"
+    static_configs:
+      - targets: ["192.168.10.132:9091"]
