@@ -56,5 +56,9 @@ export default async () => {
     workerErrorsTotal.inc({ worker_name: workerName });
   }
 
+  console.log(
+    new Date(),
+    `[Truly Remote] Worker execution duration: ${duration({ worker_name: workerName })} seconds`
+  );
   duration({ worker_name: workerName });
 };

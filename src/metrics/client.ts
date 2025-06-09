@@ -16,6 +16,7 @@ export const workerExecutionDuration = new Histogram({
   name: "worker_execution_duration_seconds",
   help: "Duration of worker execution in seconds",
   labelNames: ["worker_name"],
+  buckets: [0.1, 0.5, 1, 2.5, 5, 10, 30],
   registers: [register],
 });
 
