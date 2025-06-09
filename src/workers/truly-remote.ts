@@ -16,9 +16,7 @@ import { TRULY_REMOTE_CATEGORIES } from "@/types";
 const workerName = "truly-remote";
 
 export default async () => {
-  const duration = workerExecutionDuration.startTimer({
-    worker_name: workerName,
-  });
+  const duration = workerExecutionDuration.startTimer();
   workerExecutionTotal.inc({ worker_name: workerName });
 
   try {
@@ -58,5 +56,5 @@ export default async () => {
     workerErrorsTotal.inc({ worker_name: workerName });
   }
 
-  duration();
+  duration({ worker_name: workerName });
 };

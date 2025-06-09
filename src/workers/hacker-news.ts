@@ -19,9 +19,7 @@ import {
 const workerName = "hacker-news";
 
 export default async () => {
-  const duration = workerExecutionDuration.startTimer({
-    worker_name: workerName,
-  });
+  const duration = workerExecutionDuration.startTimer();
   workerExecutionTotal.inc({ worker_name: workerName });
   try {
     // Get all story IDs from the database
@@ -59,5 +57,5 @@ export default async () => {
     workerErrorsTotal.inc({ worker_name: workerName });
   }
 
-  duration();
+  duration({ worker_name: workerName });
 };
