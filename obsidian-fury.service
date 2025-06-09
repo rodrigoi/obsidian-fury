@@ -14,7 +14,7 @@ User=root
 WorkingDirectory=/apps/obsidian-fury
 # the command to start the app
 # requires absolute paths
-ExecStart=/home/root/.bun/bin/bun run src/index.ts --metrics --worker "hacker-news" --worker "truly-remote"
+ExecStart=/root/.bun/bin/bun run src/index.ts --metrics --worker "truly-remote"
 # restart policy
 # one of {no|on-success|on-failure|on-abnormal|on-watchdog|on-abort|always}
 Restart=always

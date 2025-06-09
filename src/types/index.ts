@@ -4,12 +4,12 @@ export type CamelCase<S extends string> =
     : Lowercase<S>;
 
 export const TRULY_REMOTE_CATEGORIES = [
-  "Development",
+  // "Development",
   "Marketing",
   "Product",
-  "Business",
-  "Sales",
-  "Customer Service",
+  // "Business",
+  // "Sales",
+  // "Customer Service",
 ] as const;
 
 export type TrulyRemoteCategory = (typeof TRULY_REMOTE_CATEGORIES)[number];
