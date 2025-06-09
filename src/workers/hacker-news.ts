@@ -34,6 +34,7 @@ export default async () => {
     // Bail if there are no new stories
     if (newStoryIds.length === 0) {
       console.log(new Date(), "[Hacker News] No new stories found.");
+      duration({ worker_name: workerName });
       return;
     }
 

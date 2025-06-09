@@ -36,6 +36,7 @@ export default async () => {
     // Bail if there are no new listings
     if (newListings.length === 0) {
       console.log(new Date(), "[Truly Remote] No new listings found.");
+      duration({ worker_name: workerName });
       return;
     }
 
@@ -56,9 +57,5 @@ export default async () => {
     workerErrorsTotal.inc({ worker_name: workerName });
   }
 
-  console.log(
-    new Date(),
-    `[Truly Remote] Worker execution duration: ${duration({ worker_name: workerName })} seconds`
-  );
   duration({ worker_name: workerName });
 };
