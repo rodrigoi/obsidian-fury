@@ -17,7 +17,10 @@ const workerName = "truly-remote";
 
 export default async () => {
   const duration = workerExecutionDuration.startTimer();
-  workerExecutionTotal.inc({ worker_name: workerName });
+  workerExecutionTotal.inc({
+    worker_name: workerName,
+    date: new Date().toISOString().split("T")[0],
+  });
 
   try {
     // Fetch all listings for each category

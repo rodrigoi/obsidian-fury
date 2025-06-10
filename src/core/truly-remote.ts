@@ -1,11 +1,12 @@
+import { emailSendTotal, httpCallsTotal } from "@/metrics/client";
 import type { CamelCase, TrulyRemoteCategory } from "@/types";
 
-import TRNotification from "@/emails/tr-notification";
-import { TRULY_REMOTE_CATEGORIES } from "@/types";
 import { db } from "@/data/client";
+import { trulyRemote } from "@/data/schema";
+import TRNotification from "@/emails/tr-notification";
 import { env } from "@/env";
 import { resend } from "@/resend/client";
-import { trulyRemote } from "@/data/schema";
+import { TRULY_REMOTE_CATEGORIES } from "@/types";
 import { z } from "zod";
 
 export const trulyRemoteResponseSchema = z
@@ -49,6 +50,13 @@ export const fetchListings = async (category: TrulyRemoteCategory) => {
     headers: {
       "Content-Type": "application/json",
     },
+  });
+
+  httpCallsTotal.inc({
+    worker_name: "truly-remote",
+    endpoint: "getListing",
+    status_code: response.status.toString(),
+    date: new Date().toISOString(),
   });
 
   const parsedResult = trulyRemoteResponseSchema.safeParse(
@@ -111,5 +119,10 @@ export const sendNewListingsEmail = async (listings: TrulyRemoteListings) => {
     to: env.EMAIL_TO.split(","),
     subject: "[Obsidian Romeo] New TrulyRemote.co Job Postings!",
     react: TRNotification(listingsByCategory) as React.ReactElement,
+  });
+
+  emailSendTotal.inc({
+    worker_name: "truly-remote",
+    date: new Date().toISOString().split("T")[0],
   });
 };

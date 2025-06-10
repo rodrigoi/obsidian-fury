@@ -23,7 +23,7 @@ export const workerExecutionDuration = new Histogram({
 export const workerExecutionTotal = new Counter({
   name: "worker_execution_total",
   help: "Total number of worker executions",
-  labelNames: ["worker_name"],
+  labelNames: ["worker_name", "date"],
   registers: [register],
 });
 
@@ -59,12 +59,20 @@ export const emailSendDuration = new Histogram({
 export const emailSendTotal = new Counter({
   name: "email_send_total",
   help: "Total number of emails sent",
+  labelNames: ["worker_name", "date"],
   registers: [register],
 });
 
 export const emailSendErrors = new Counter({
   name: "email_send_errors_total",
   help: "Total number of email sending errors",
+  registers: [register],
+});
+
+export const httpCallsTotal = new Counter({
+  name: "http_calls_total",
+  help: "Total number of HTTP calls",
+  labelNames: ["worker_name", "endpoint", "status_code", "date"],
   registers: [register],
 });
 
