@@ -169,8 +169,8 @@ const TRCategoryListings = ({
   );
 };
 
-export const TRNotification: React.FC<Readonly<TRNotificationProps>> = (
-  listingsByCategory = testListings
+export const TRNotification = (
+  listingsByCategory: Partial<TRNotificationProps> = testListings
 ) => (
   <Html>
     <Preview>Found new job offers on TrulyRemote.co to check.</Preview>
