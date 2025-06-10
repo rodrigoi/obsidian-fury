@@ -25,6 +25,8 @@ export default async () => {
       TRULY_REMOTE_CATEGORIES.map((category) => fetchListings(category))
     );
 
+    console.log(categoryListings);
+
     // Get all listing IDs from the database
     const listingIds = new Set(await getAllListingIds());
 
