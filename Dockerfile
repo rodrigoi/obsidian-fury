@@ -3,7 +3,7 @@ WORKDIR /app
 
 RUN addgroup -S obsidian-fury && adduser -S -G obsidian-fury obsidian-fury
 
-COPY package.json bun.lock ./
+COPY package.json bun.lockb ./
 RUN bun install --frozen-lockfile --production
 
 COPY src ./src
