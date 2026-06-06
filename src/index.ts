@@ -1,12 +1,11 @@
 #!/usr/bin/env bun
 
-import { startMetricsServer } from "@/metrics/server";
-import hackerNews from "@/workers/hacker-news";
-import trulyRemote from "@/workers/truly-remote";
 import arg from "arg";
-import cron from "node-cron";
-import { z } from "zod";
+import hackerNews from "@/workers/hacker-news";
+import { startMetricsServer } from "@/metrics/server";
+import trulyRemote from "@/workers/truly-remote";
 import { version } from "../package.json";
+import { z } from "zod";
 
 /**
  * available worker names validation schema
@@ -43,7 +42,7 @@ const args = arg(
   },
   {
     argv: Bun.argv,
-  }
+  },
 );
 
 /**
@@ -70,19 +69,9 @@ const main = async () => {
 
     // Execute each worker sequentially
     for (const workerName of parsedWorkers.data) {
-      /**
-       * schedule cron job to run every 30 minutes
-       */
-      cron.schedule("* * * * *", async () => {
-        console.log("Running worker", workerName);
-        const worker = availableWorkers[workerName];
-        // start the worker process
-        await worker();
-      });
-
-      // const worker = availableWorkers[workerName];
-      // // start the worker process
-      // await worker();
+      const worker = availableWorkers[workerName];
+      // start the worker process
+      await worker();
     }
   }
 };

@@ -31,7 +31,7 @@ export const getAllStoryIds = async () => {
 
 export const fetchStoryIds = async () => {
   const request = await fetch(
-    "https://hacker-news.firebaseio.com/v0/jobstories.json"
+    "https://hacker-news.firebaseio.com/v0/jobstories.json",
   );
   return z.array(z.number()).parse(await request.json());
 };
@@ -40,10 +40,10 @@ export const fetchStories = async (storyIds: number[]) => {
   const stories = await Promise.all(
     storyIds.map(async (storyId: number) => {
       const request = await fetch(
-        `https://hacker-news.firebaseio.com/v0/item/${storyId}.json`
+        `https://hacker-news.firebaseio.com/v0/item/${storyId}.json`,
       );
       return storySchema.parse(await request.json());
-    })
+    }),
   );
 
   return stories;
@@ -60,7 +60,7 @@ export const insertNewStories = async (stories: HackerNewsStory[]) =>
           url,
           publishedAt: new Date(time * 1000).toISOString(),
         }))
-        .reverse()
+        .reverse(),
     )
     .onConflictDoNothing({
       target: [hackernews.postId],
@@ -70,6 +70,6 @@ export const sendNewStoriesEmail = async (stories: HackerNewsStory[]) =>
   await resend.emails.send({
     from: `${env.EMAIL_FROM_NAME} <${env.EMAIL_FROM}>`,
     to: env.EMAIL_TO.split(","),
-    subject: "[Obsidian Romeo] New Job Postings on Hacker News!",
+    subject: "[Obsidian Fury] New Job Postings on Hacker News!",
     react: HNNotification({ stories }) as React.ReactElement,
   });

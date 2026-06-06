@@ -1,12 +1,12 @@
-import { emailSendTotal, httpCallsTotal } from "@/metrics/client";
 import type { CamelCase, TrulyRemoteCategory } from "@/types";
+import { emailSendTotal, httpCallsTotal } from "@/metrics/client";
 
-import { db } from "@/data/client";
-import { trulyRemote } from "@/data/schema";
 import TRNotification from "@/emails/tr-notification";
+import { TRULY_REMOTE_CATEGORIES } from "@/types";
+import { db } from "@/data/client";
 import { env } from "@/env";
 import { resend } from "@/resend/client";
-import { TRULY_REMOTE_CATEGORIES } from "@/types";
+import { trulyRemote } from "@/data/schema";
 import { z } from "zod";
 
 export const trulyRemoteResponseSchema = z
@@ -23,7 +23,7 @@ export const trulyRemoteResponseSchema = z
           roleApplyURL: z.string().url(),
           createdOn: z.string().datetime({ offset: true }),
         }),
-      })
+      }),
     ),
   })
   .transform((value) => {
@@ -56,11 +56,11 @@ export const fetchListings = async (category: TrulyRemoteCategory) => {
     worker_name: "truly-remote",
     endpoint: "getListing",
     status_code: response.status.toString(),
-    date: new Date().toISOString(),
+    date: new Date().toISOString().split("T")[0],
   });
 
   const parsedResult = trulyRemoteResponseSchema.safeParse(
-    await response.json()
+    await response.json(),
   );
 
   if (!parsedResult.success) {
@@ -88,7 +88,7 @@ export const insertNewListings = async (listings: TrulyRemoteListings) =>
           ...post,
           publishedAt: new Date(post.publishedAt).toISOString(),
         }))
-        .reverse()
+        .reverse(),
     )
     .onConflictDoNothing({
       target: [trulyRemote.listingId],
@@ -96,7 +96,7 @@ export const insertNewListings = async (listings: TrulyRemoteListings) =>
 
 export const toCamelCase = <S extends string>(str: S): CamelCase<S> => {
   return str.replace(/(?:^|_)(\w)/g, (_, letter) =>
-    letter.toUpperCase()
+    letter.toUpperCase(),
   ) as CamelCase<S>;
 };
 
@@ -106,18 +106,19 @@ export const sendNewListingsEmail = async (listings: TrulyRemoteListings) => {
     (acc, category) => {
       acc[toCamelCase(category) as CamelCase<TrulyRemoteCategory>] =
         listings.filter(
-          (listing) => listing.category.toLowerCase() === category.toLowerCase()
+          (listing) =>
+            listing.category.toLowerCase() === category.toLowerCase(),
         );
       return acc;
     },
-    {} as Record<CamelCase<TrulyRemoteCategory>, TrulyRemoteListings>
+    {} as Record<CamelCase<TrulyRemoteCategory>, TrulyRemoteListings>,
   );
 
   // Send email notification of new listings
   await resend.emails.send({
     from: `${env.EMAIL_FROM_NAME} <${env.EMAIL_FROM}>`,
     to: env.EMAIL_TO.split(","),
-    subject: "[Obsidian Romeo] New TrulyRemote.co Job Postings!",
+    subject: "[Obsidian Fury] New TrulyRemote.co Job Postings!",
     react: TRNotification(listingsByCategory) as React.ReactElement,
   });
 
